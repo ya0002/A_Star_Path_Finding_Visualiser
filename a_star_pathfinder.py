@@ -1,6 +1,5 @@
 from queue import PriorityQueue as PQ
 
-
 class Node:
     def __init__(self, row, col):
         self.row, self.col = row, col
@@ -15,6 +14,10 @@ class Node:
     # function to calculate f_cost
     def calculate_fcost(self):
         self.f_cost = self.g_cost + self.h_cost
+
+    # Overloading '<'(less than) operator
+    def __lt__(self, other):
+        return self.f_cost < other.f_cost
 
 
 # function to display grid
@@ -74,61 +77,65 @@ closed = []
 closed.append(source)
 current = source
 
+def open_add(to_enter,open,closed):
+    if to_enter not in closed:
+        open.put((to_enter.f_cost, to_enter))
+
 while True:
 
     # top left
     try:
         to_enter = grid[current.row - 1][current.col - 1]
-        open.put((to_enter.f_cost, to_enter))
+        open_add(to_enter,open,closed)
     except IndexError:
         continue
 
     # top
     try:
         to_enter = grid[current.row - 1][current.col]
-        open.put((to_enter.f_cost, to_enter))
+        open_add(to_enter,open,closed)
     except IndexError:
         continue
 
     # top right
     try:
         to_enter = grid[current.row - 1][current.col + 1]
-        open.put((to_enter.f_cost, to_enter))
+        open_add(to_enter,open,closed)
     except IndexError:
         continue
     # ------------------------bottom-----------------------------------------
     # bottom left
     try:
         to_enter = grid[current.row + 1][current.col - 1]
-        open.put((to_enter.f_cost, to_enter))
+        open_add(to_enter,open,closed)
     except IndexError:
         continue
 
     # bottom
     try:
         to_enter = grid[current.row + 1][current.col]
-        open.put((to_enter.f_cost, to_enter))
+        open_add(to_enter,open,closed)
     except IndexError:
         continue
 
     # bottom right
     try:
         to_enter = grid[current.row + 1][current.col + 1]
-        open.put((to_enter.f_cost, to_enter))
+        open_add(to_enter,open,closed)
     except IndexError:
         continue
     # ----------------------------------sides---------------------
     # left
     try:
         to_enter = grid[current.row][current.col - 1]
-        open.put((to_enter.f_cost, to_enter))
+        open_add(to_enter,open,closed)
     except IndexError:
         continue
 
     # right
     try:
         to_enter = grid[current.row][current.col + 1]
-        open.put((to_enter.f_cost, to_enter))
+        open_add(to_enter,open,closed)
     except IndexError:
         continue
 
@@ -136,7 +143,10 @@ while True:
     current.path,current.way=True,False
     closed.append(current)
 
-    if current.f_cost:
+    while not open.empty():
+        open.get()
+
+    if current.target:
         break
 
 show_grid(grid)
