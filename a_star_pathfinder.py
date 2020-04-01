@@ -1,5 +1,6 @@
 from queue import PriorityQueue as PQ
 
+
 class Node:
     def __init__(self, row, col):
         self.row, self.col = row, col
@@ -9,7 +10,7 @@ class Node:
         self.obstacle = False
         self.source = False
         self.target = False
-        self.path=False
+        self.path = False
 
     # function to calculate f_cost
     def calculate_fcost(self):
@@ -51,9 +52,16 @@ def set_target(grid, row, column):
 def set_cost(grid, source_r, source_c, target_r, target_c):
     for currentrow in range(len(grid)):
         for currentcol in range(currentrow):
-            grid[currentrow][currentcol].g_cost = ((source_r - currentrow) ** 2) + ((source_c - currentcol) ** 2)
-            grid[currentrow][currentcol].h_cost = ((target_r - currentrow) ** 2) + ((target_c - currentcol) ** 2)
+            grid[currentrow][currentcol].g_cost = (abs(source_r - currentrow) + abs(source_c - currentcol))**1/2
+            grid[currentrow][currentcol].h_cost = (abs(target_r - currentrow) + abs(target_c - currentcol))**1/2
             grid[currentrow][currentcol].calculate_fcost()
+
+
+def enter(grid,open,closed,to_enter_row,to_enter_col):
+    if to_enter_row>=0 and to_enter_col>=0:
+        to_enter = grid[to_enter_row][to_enter_col]
+        if to_enter not in closed:
+            open.put((to_enter.f_cost, to_enter))
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -77,70 +85,66 @@ closed = []
 closed.append(source)
 current = source
 
-def open_add(to_enter,open,closed):
-    if to_enter not in closed:
-        open.put((to_enter.f_cost, to_enter))
-
 while True:
 
     # top left
     try:
-        to_enter = grid[current.row - 1][current.col - 1]
-        open_add(to_enter,open,closed)
+        to_enter_row,to_enter_col=current.row-1,current.col - 1
+        enter(grid,open,closed,to_enter_row,to_enter_col)
     except IndexError:
         continue
 
     # top
     try:
-        to_enter = grid[current.row - 1][current.col]
-        open_add(to_enter,open,closed)
+        to_enter_row,to_enter_col = current.row - 1,current.col
+        enter(grid,open,closed,to_enter_row,to_enter_col)
     except IndexError:
         continue
 
     # top right
     try:
-        to_enter = grid[current.row - 1][current.col + 1]
-        open_add(to_enter,open,closed)
+        to_enter_row,to_enter_col = current.row - 1,current.col + 1
+        enter(grid,open,closed,to_enter_row,to_enter_col)
     except IndexError:
         continue
     # ------------------------bottom-----------------------------------------
     # bottom left
     try:
-        to_enter = grid[current.row + 1][current.col - 1]
-        open_add(to_enter,open,closed)
+        to_enter_row,to_enter_col = current.row + 1,current.col - 1
+        enter(grid,open,closed,to_enter_row,to_enter_col)
     except IndexError:
         continue
 
     # bottom
     try:
-        to_enter = grid[current.row + 1][current.col]
-        open_add(to_enter,open,closed)
+        to_enter_row,to_enter_col = current.row + 1,current.col
+        enter(grid,open,closed,to_enter_row,to_enter_col)
     except IndexError:
         continue
 
     # bottom right
     try:
-        to_enter = grid[current.row + 1][current.col + 1]
-        open_add(to_enter,open,closed)
+        to_enter_row,to_enter_col = current.row + 1,current.col + 1
+        enter(grid,open,closed,to_enter_row,to_enter_col)
     except IndexError:
         continue
     # ----------------------------------sides---------------------
     # left
     try:
-        to_enter = grid[current.row][current.col - 1]
-        open_add(to_enter,open,closed)
+        to_enter_row,to_enter_col = current.row,current.col - 1
+        enter(grid,open,closed,to_enter_row,to_enter_col)
     except IndexError:
         continue
 
     # right
     try:
-        to_enter = grid[current.row][current.col + 1]
-        open_add(to_enter,open,closed)
+        to_enter_row,to_enter_col = current.row,current.col + 1
+        enter(grid,open,closed,to_enter_row,to_enter_col)
     except IndexError:
         continue
 
     current = open.get()[1]
-    current.path,current.way=True,False
+    current.path, current.way = True, False
     closed.append(current)
 
     while not open.empty():
