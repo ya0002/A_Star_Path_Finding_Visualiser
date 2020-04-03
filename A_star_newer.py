@@ -1,5 +1,3 @@
-import heapdict as HD
-import copy
 import math
 
 
@@ -19,11 +17,6 @@ class Node:
     def calculate_fcost(self):
         self.f_cost = self.g_cost + self.h_cost
 
-    # # Overloading '<'(less than) operator
-    # def __lt__(self, other):
-    #     return self.f_cost < other.f_cost
-
-
 class PriorityQ:
     def __init__(self):
         self.Q = []
@@ -36,10 +29,6 @@ class PriorityQ:
                 self.Q.append((node.f_cost, node))
         else:
             if node not in closed:
-                # for i in range(len(self.Q)):
-                #     if self.Q[i][1]==node:
-                #         self.Q[i][0]==node.f_cost   #if the node already exists in open
-                #         return 0
                 self.Qsort(node)
 
     def Qsort(self, node):
