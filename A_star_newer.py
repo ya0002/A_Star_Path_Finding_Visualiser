@@ -24,11 +24,10 @@ class PriorityQ:
 
     #  Q= [(node.f_cost,node),(),(), .....]
     def add(self, node, closed):
-        if len(self.Q) == 0:
-            if node not in closed:
+        if node not in closed:
+            if len(self.Q) == 0:
                 self.Q.append((node.f_cost, node))
-        else:
-            if node not in closed:
+            else:
                 self.Qsort(node)
 
     def Qsort(self, node):
@@ -88,8 +87,9 @@ def set_cost(grid, currentrow, currentcol, target_r, target_c, parent, distance=
     dy = abs(target_c - currentcol)
     grid[currentrow][currentcol].h_cost = (dx + dy) + ((1.4 - 2) * min(dx, dy))
     dummy_g=parent.g_cost + distance
-    if grid[currentrow][currentcol].g_cost==None or dummy_g<grid[currentrow][currentcol].g_cost :
-        grid[currentrow][currentcol].g_cost =dummy_g
+    # if grid[currentrow][currentcol].g_cost==None or dummy_g<grid[currentrow][currentcol].g_cost :
+    #     grid[currentrow][currentcol].g_cost =dummy_g
+    grid[currentrow][currentcol].g_cost =dummy_g
     grid[currentrow][currentcol].calculate_fcost()
 
 def add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,distance=1 ):
