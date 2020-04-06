@@ -33,23 +33,28 @@ class PriorityQ:
     def Qsort(self, node):
         for i in range(len(self.Q)):
 
+            # if F-costs are equal then the one with the lowest H-cost gets priority
             if self.Q[i][0] == node.f_cost:
                 if self.Q[i][1].h_cost > node.h_cost:
                     self.Q.insert(i, (node.f_cost, node))
                     break
 
+            # The lowest F-cost gets priority
             if self.Q[i][0] > node.f_cost:
                 self.Q.insert(i, (node.f_cost, node))
                 break
 
+            # if the F-Cost to be added is the largest in the Q
             if i == len(self.Q) - 1:
                 self.Q.append((node.f_cost, node))
 
+    # Pop the first element, i.e. the one with the lowest F-cost
     def popQ(self):
         if len(self.Q)!=0:
             lowest=self.Q.pop(0)
             return lowest
 
+    # append all the remaining elements of Q to Q_copy and then clear the Q.
     def copyQ(self):
         if len(self.Q)!=0:
             for i in self.Q:
@@ -91,13 +96,17 @@ def set_obstacle(grid, row, column):
 def set_cost(grid, currentrow, currentcol, target_r, target_c, parent, distance=1):
     dx = abs(target_r - currentrow)
     dy = abs(target_c - currentcol)
+
+    # got this formula from Stanford's website on A* path finding
     grid[currentrow][currentcol].h_cost = (dx + dy) + ((1.4 - 2) * min(dx, dy))
-    dummy_g=parent.g_cost + distance
+    # dummy_g=parent.g_cost + distance
     # if grid[currentrow][currentcol].g_cost==None or dummy_g<grid[currentrow][currentcol].g_cost :
     #     grid[currentrow][currentcol].g_cost =dummy_g
-    grid[currentrow][currentcol].g_cost =dummy_g
+    # grid[currentrow][currentcol].g_cost =dummy_g
+    grid[currentrow][currentcol].g_cost =parent.g_cost + distance
     grid[currentrow][currentcol].calculate_fcost()
 
+# function to add to open list/Q
 def add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,distance=1 ):
     if to_enter_row>=0 and to_enter_col>0:
         set_cost(grid, to_enter_row, to_enter_col, target_r, target_c, parent,distance)
@@ -125,7 +134,7 @@ if __name__ == '__main__':
     closed = []
     closed.append(source)
     parent = source
-    dd=math.sqrt(2)
+    dd=math.sqrt(2)  # diagonal distance , approx=1.4(root 2)
     while True:
 
         # top left
