@@ -1,6 +1,5 @@
 import math
-
-
+# to store each node of the graph
 class Node:
     def __init__(self, row, col):
         self.row, self.col = row, col
@@ -17,6 +16,7 @@ class Node:
     def calculate_fcost(self):
         self.f_cost = self.g_cost + self.h_cost
 
+#Data structure to store nodes according to their F-cost or H-cost as needed
 class PriorityQ:
     def __init__(self):
         self.Q = []
@@ -24,7 +24,7 @@ class PriorityQ:
 
     #  Q= [(node.f_cost,node),(),(), .....]
     def add(self, node, closed):
-        if node not in closed:
+        if node not in closed and node.obstacle==False:
             if len(self.Q) == 0:
                 self.Q.append((node.f_cost, node))
             else:
@@ -46,13 +46,15 @@ class PriorityQ:
                 self.Q.append((node.f_cost, node))
 
     def popQ(self):
-        lowest=self.Q.pop(0)
-        return lowest
+        if len(self.Q)!=0:
+            lowest=self.Q.pop(0)
+            return lowest
 
     def copyQ(self):
-        for i in self.Q:
-            self.Q_copy.append(i)
-        self.Q.clear()
+        if len(self.Q)!=0:
+            for i in self.Q:
+                self.Q_copy.append(i)
+            self.Q.clear()
 
 # function to display grid
 def show_grid(grid):
@@ -79,6 +81,10 @@ def set_source(grid, row, column):
 # function to set target node
 def set_target(grid, row, column):
     grid[row][column].target, grid[row][column].way = True, False
+
+#function to set obstacle
+def set_obstacle(grid, row, column):
+    grid[row][column].obstacle, grid[row][column].way = True, False
 
 
 # calculate h_cost for all nodes
@@ -109,7 +115,9 @@ if __name__ == '__main__':
     # Pinning source and target
     set_source(grid, source_r, source_c)
     set_target(grid, target_r, target_c)
-
+    # set_obstacle(grid, 0, 1)
+    # set_obstacle(grid, 0, 2)
+    # set_obstacle(grid, 3, 8)
     source = grid[source_r][source_c]
     source.g_cost = 0
 
@@ -125,56 +133,56 @@ if __name__ == '__main__':
             to_enter_row, to_enter_col = parent.row - 1, parent.col - 1
             add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,dd )
         except IndexError:
-            continue
+            pass
 
         # top
         try:
             to_enter_row, to_enter_col = parent.row - 1, parent.col
             add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r)
         except IndexError:
-            continue
+            pass
 
         # top right
         try:
             to_enter_row, to_enter_col = parent.row - 1, parent.col + 1
             add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,dd )
         except IndexError:
-            continue
+            pass
         # ------------------------bottom-----------------------------------------
         # bottom left
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col - 1
             add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,dd )
         except IndexError:
-            continue
+            pass
 
         # bottom
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col
             add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r)
         except IndexError:
-            continue
+            pass
 
         # bottom right
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col + 1
             add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,dd )
         except IndexError:
-            continue
+            pass
         # ----------------------------------sides---------------------
         # left
         try:
             to_enter_row, to_enter_col = parent.row, parent.col - 1
             add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r)
         except IndexError:
-            continue
+            pass
 
         # right
         try:
             to_enter_row, to_enter_col = parent.row, parent.col + 1
             add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r)
         except IndexError:
-            continue
+            pass
 
         # gives the element with the lowest f_cost
         parent.way,parent.path=False,True
