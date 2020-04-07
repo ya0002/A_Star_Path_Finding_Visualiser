@@ -124,9 +124,11 @@ if __name__ == '__main__':
     # Pinning source and target
     set_source(grid, source_r, source_c)
     set_target(grid, target_r, target_c)
-    # set_obstacle(grid, 0, 1)
-    # set_obstacle(grid, 0, 2)
+    # set_obstacle(grid, 0, 8)
+    # set_obstacle(grid, 1, 8)
+    # set_obstacle(grid, 2, 8)
     # set_obstacle(grid, 3, 8)
+    # set_obstacle(grid, 4, 8)
     source = grid[source_r][source_c]
     source.g_cost = 0
 
@@ -199,6 +201,10 @@ if __name__ == '__main__':
         to_be_parent.parent=parent
         parent=to_be_parent
         closed.append(parent)
+
+        if len(open.Q)==0:
+            print('no valid path')
+            break
 
         open.copyQ()
 
