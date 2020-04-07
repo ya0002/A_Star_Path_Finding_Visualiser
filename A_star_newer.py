@@ -114,8 +114,10 @@ def add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,targe
 
 # ----------------------------------------------------main------------------------------------------------------------------
 if __name__ == '__main__':
-    # a grid of 5x10(4x9)
-    grid = [[Node(i, j) for j in range(10)] for i in range(10)]
+
+    # a grid of 10x11(9x10)
+    # 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
+    grid = [[Node(i, j) for j in range(11)] for i in range(10)]
 
     # enter the coordinates of source and target
     source_r, source_c = map(int, input("Enter coordinates of source: ").split(","))
