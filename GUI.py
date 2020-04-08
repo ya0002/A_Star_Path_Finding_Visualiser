@@ -67,13 +67,14 @@ class Interface(GridLayout):
             self.target_c_GUI=g_col
             A_Star.target_r=self.corrected_row[g_col]
             A_Star.target_c=int(g_row)
-            A_Star.test_print()
 
     def set_obstacle_GUI(self,g_row,g_col):
         with self.canvas:
             if (g_row!=self.source_r_GUI or g_col!=self.source_c_GUI) and (g_row!=self.target_r_GUI or g_col!=self.target_c_GUI):
                 Color(0, .5, .5,mode='rgb')
                 Rectangle(pos=(g_row*50,g_col*50),size=(45,45))
+                A_Star.obstacle_list.add((self.corrected_row[g_col],int(g_row)))
+                A_Star.test_print()
 
 class MyApp(App):
     def build(self):

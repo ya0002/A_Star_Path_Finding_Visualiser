@@ -118,10 +118,13 @@ grid = [[Node(i, j) for j in range(10)] for i in range(10)]
 # enter the coordinates of source and target
 source_r, source_c = None,None
 target_r, target_c = None,None
+obstacle_list=set()
 
 def test_print():
     print('source-r',source_r,'source_c',source_c)
     print('target-r',target_r,'target_c',target_c)
+    print(obstacle_list)
+    print(len(obstacle_list))
 
 def calculate():
     # Pinning source and target
