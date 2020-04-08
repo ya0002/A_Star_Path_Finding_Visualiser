@@ -22,7 +22,9 @@ class Interface(GridLayout):
                     Rectangle(pos=(i*50,j*50),size=(45,45))
 
     def on_touch_down(self, touch):
-        print(touch.pos[0]//50,touch.pos[1]//50)
+        corrected_row={0:9,1:8,2:7,3:6,4:5,5:4,6:3,7:2,8:1,9:0}
+        print(corrected_row[touch.pos[1]//50],int(touch.pos[0]//50))   # it's basically corrected_row[col//50] , int(row)
+
 
 class MyApp(App):
     def build(self):
