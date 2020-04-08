@@ -97,13 +97,8 @@ def set_obstacle(grid, row, column):
 def set_cost(grid, currentrow, currentcol, target_r, target_c, parent, distance=1):
     dx = abs(target_r - currentrow)
     dy = abs(target_c - currentcol)
-
     # got this formula from Stanford's website on A* path finding
     grid[currentrow][currentcol].h_cost = (dx + dy) + ((1.4 - 2) * min(dx, dy))
-    # dummy_g=parent.g_cost + distance
-    # if grid[currentrow][currentcol].g_cost==None or dummy_g<grid[currentrow][currentcol].g_cost :
-    #     grid[currentrow][currentcol].g_cost =dummy_g
-    # grid[currentrow][currentcol].g_cost =dummy_g
     grid[currentrow][currentcol].g_cost =parent.g_cost + distance
     grid[currentrow][currentcol].calculate_fcost()
 
@@ -114,31 +109,24 @@ def add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,targe
         open.add(grid[to_enter_row][to_enter_col],closed)
 
 # ----------------------------------------------------main------------------------------------------------------------------
-if __name__ == '__main__':
 
-    # a grid of 10x10(9x9)
-    # (RESOLVED) 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
-    grid = [[Node(i, j) for j in range(10)] for i in range(10)]
 
-    # enter the coordinates of source and target
-    source_r, source_c = map(int, input("Enter coordinates of source: ").split(","))
-    target_r, target_c = map(int, input("Enter coordinates of target: ").split(","))
+# a grid of 10x10(9x9)
+# (RESOLVED) 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
+grid = [[Node(i, j) for j in range(10)] for i in range(10)]
 
+# enter the coordinates of source and target
+source_r, source_c = None,None
+target_r, target_c = None,None
+
+def test_print():
+    print('source-r',source_r,'source_c',source_c)
+    print('target-r',target_r,'target_c',target_c)
+
+def calculate():
     # Pinning source and target
     set_source(grid, source_r, source_c)
     set_target(grid, target_r, target_c)
-
-    # set_obstacle(grid, 0, 4)
-    # set_obstacle(grid, 1, 3)
-    # set_obstacle(grid, 2, 1)
-    # set_obstacle(grid, 2, 3)
-    # set_obstacle(grid, 2, 2)
-    # set_obstacle(grid, 1, 4)
-    # set_obstacle(grid, 2, 0)
-    # set_obstacle(grid,6,9)
-    # set_obstacle(grid,7,8)
-    # set_obstacle(grid,8,7)
-    # set_obstacle(grid,7,7)
 
     source = grid[source_r][source_c]
     source.g_cost = 0
