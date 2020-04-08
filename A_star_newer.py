@@ -115,9 +115,9 @@ def add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,targe
 # ----------------------------------------------------main------------------------------------------------------------------
 if __name__ == '__main__':
 
-    # a grid of 10x11(9x10)
+    # a grid of 10x10(9x9)
     # 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
-    grid = [[Node(i, j) for j in range(11)] for i in range(10)]
+    grid = [[Node(i, j) for j in range(10)] for i in range(10)]
 
     # enter the coordinates of source and target
     source_r, source_c = map(int, input("Enter coordinates of source: ").split(","))
@@ -126,12 +126,19 @@ if __name__ == '__main__':
     # Pinning source and target
     set_source(grid, source_r, source_c)
     set_target(grid, target_r, target_c)
-    set_obstacle(grid, 0, 4)
-    set_obstacle(grid, 1, 3)
-    set_obstacle(grid, 2, 1)
-    set_obstacle(grid, 2, 3)
-    set_obstacle(grid, 2, 2)
-    set_obstacle(grid, 1, 4)
+
+    # set_obstacle(grid, 0, 4)
+    # set_obstacle(grid, 1, 3)
+    # set_obstacle(grid, 2, 1)
+    # set_obstacle(grid, 2, 3)
+    # set_obstacle(grid, 2, 2)
+    # set_obstacle(grid, 1, 4)
+    # set_obstacle(grid, 2, 0)
+    # set_obstacle(grid,6,9)
+    # set_obstacle(grid,7,8)
+    # set_obstacle(grid,8,7)
+    # set_obstacle(grid,7,7)
+
     source = grid[source_r][source_c]
     source.g_cost = 0
 
@@ -140,6 +147,8 @@ if __name__ == '__main__':
     closed.append(source)
     parent = source
     dd=math.sqrt(2)  # diagonal distance , approx=1.4(root 2)
+    break_counter=0
+
     while True:
 
         # top left
@@ -203,7 +212,7 @@ if __name__ == '__main__':
             if parent!=source:
                 parent=parent.root_parent
             else:
-                pass
+                break_counter+=1
             # print('no valid path')
             # break
         else:
@@ -214,7 +223,9 @@ if __name__ == '__main__':
             parent=to_be_parent
             closed.append(parent)
 
-
+        if break_counter==2:
+            print('no valid path')
+            break
 
         open.copyQ()
 
