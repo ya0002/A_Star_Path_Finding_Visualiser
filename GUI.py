@@ -67,7 +67,7 @@ class Interface(GridLayout):
     def set_obstacle_GUI(self,g_row,g_col):
         with self.canvas:
             if (g_row!=self.source_r_GUI or g_col!=self.source_c_GUI) and (g_row!=self.target_r_GUI or g_col!=self.target_c_GUI):
-                Color(0, 0, 0,mode='rgb')
+                Color(0, .5, .5,mode='rgb')
                 Rectangle(pos=(g_row*50,g_col*50),size=(45,45))
 
 class MyApp(App):
