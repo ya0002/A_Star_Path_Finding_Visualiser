@@ -10,7 +10,7 @@ class Node:
         self.source = False
         self.target = False
         self.path = False
-        self.parent = None
+        self.root_parent = None
 
     # function to calculate f_cost
     def calculate_fcost(self):
@@ -108,7 +108,7 @@ def set_cost(grid, currentrow, currentcol, target_r, target_c, parent, distance=
 
 # function to add to open list/Q
 def add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,distance=1 ):
-    if to_enter_row>=0 and to_enter_col>0:
+    if to_enter_row>=0 and to_enter_col>=0:
         set_cost(grid, to_enter_row, to_enter_col, target_r, target_c, parent,distance)
         open.add(grid[to_enter_row][to_enter_col],closed)
 
@@ -126,11 +126,12 @@ if __name__ == '__main__':
     # Pinning source and target
     set_source(grid, source_r, source_c)
     set_target(grid, target_r, target_c)
-    # set_obstacle(grid, 0, 8)
-    # set_obstacle(grid, 1, 8)
-    # set_obstacle(grid, 2, 8)
-    # set_obstacle(grid, 3, 8)
-    # set_obstacle(grid, 4, 8)
+    set_obstacle(grid, 0, 4)
+    set_obstacle(grid, 1, 3)
+    set_obstacle(grid, 2, 1)
+    set_obstacle(grid, 2, 3)
+    set_obstacle(grid, 2, 2)
+    set_obstacle(grid, 1, 4)
     source = grid[source_r][source_c]
     source.g_cost = 0
 
@@ -197,17 +198,23 @@ if __name__ == '__main__':
         except IndexError:
             pass
 
-        # gives the element with the lowest f_cost
-        parent.way,parent.path=False,True
-        to_be_parent=open.popQ()[1]
-        to_be_parent.parent=parent
-        parent=to_be_parent
-        closed.append(parent)
-
         # if len(Q)==0 then no path exists
         if len(open.Q)==0:
-            print('no valid path')
-            break
+            if parent!=source:
+                parent=parent.root_parent
+            else:
+                pass
+            # print('no valid path')
+            # break
+        else:
+            # gives the element with the lowest f_cost
+            parent.way,parent.path=False,True
+            to_be_parent=open.popQ()[1]
+            to_be_parent.root_parent=parent
+            parent=to_be_parent
+            closed.append(parent)
+
+
 
         open.copyQ()
 
