@@ -89,8 +89,10 @@ def set_target(grid, row, column):
     grid[row][column].target, grid[row][column].way = True, False
 
 #function to set obstacle
-def set_obstacle(grid, row, column):
-    grid[row][column].obstacle, grid[row][column].way = True, False
+def set_obstacle(grid,obstacle_list):
+    for coordinate in obstacle_list:
+        cell=grid[coordinate[0]][coordinate[1]]
+        cell.obstacle, cell.way = True, False
 
 
 # calculate h_cost for all nodes
@@ -130,6 +132,7 @@ def calculate():
     # Pinning source and target
     set_source(grid, source_r, source_c)
     set_target(grid, target_r, target_c)
+    set_obstacle(grid,obstacle_list)
 
     source = grid[source_r][source_c]
     source.g_cost = 0
