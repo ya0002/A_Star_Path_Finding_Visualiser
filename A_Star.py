@@ -24,8 +24,8 @@ class PriorityQ:
         self.Q_copy=[]
 
     #  Q= [(node.f_cost,node),(),(), .....]
-    def add(self, node, closed):
-        if node not in closed and node.obstacle==False:
+    def add(self, node, closed,thrown_out_of_closed):
+        if node not in closed and node not in thrown_out_of_closed and node.obstacle==False:
             if len(self.Q) == 0:
                 self.Q.append((node.f_cost, node))
             else:
@@ -105,10 +105,10 @@ def set_cost(grid, currentrow, currentcol, target_r, target_c, parent, distance=
     grid[currentrow][currentcol].calculate_fcost()
 
 # function to add to open list/Q
-def add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,distance=1 ):
+def add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,distance=1 ):
     if to_enter_row>=0 and to_enter_col>=0:
         set_cost(grid, to_enter_row, to_enter_col, target_r, target_c, parent,distance)
-        open.add(grid[to_enter_row][to_enter_col],closed)
+        open.add(grid[to_enter_row][to_enter_col],closed,thrown_out_of_closed)
 
 # ----------------------------------------------------main------------------------------------------------------------------
 
@@ -139,6 +139,7 @@ def calculate():
 
     open = PriorityQ()
     closed = []
+    thrown_out_of_closed=[]
     closed.append(source)
     parent = source
     dd=math.sqrt(2)  # diagonal distance , approx=1.4(root 2)
@@ -149,67 +150,68 @@ def calculate():
         # top left
         try:
             to_enter_row, to_enter_col = parent.row - 1, parent.col - 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,dd )
+            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
         except IndexError:
             pass
 
         # top
         try:
             to_enter_row, to_enter_col = parent.row - 1, parent.col
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r)
+            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
         except IndexError:
             pass
 
         # top right
         try:
             to_enter_row, to_enter_col = parent.row - 1, parent.col + 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,dd )
+            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
         except IndexError:
             pass
         # ------------------------bottom-----------------------------------------
         # bottom left
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col - 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,dd )
+            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
         except IndexError:
             pass
 
         # bottom
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r)
+            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
         except IndexError:
             pass
 
         # bottom right
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col + 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,dd )
+            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
         except IndexError:
             pass
         # ----------------------------------sides---------------------
         # left
         try:
             to_enter_row, to_enter_col = parent.row, parent.col - 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r)
+            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
         except IndexError:
             pass
 
         # right
         try:
             to_enter_row, to_enter_col = parent.row, parent.col + 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r)
+            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
         except IndexError:
             pass
 
         # if len(Q)==0 then no path exists
         if len(open.Q)==0:
             if parent!=source:
+                parent.way,parent.path=True,False
+                thrown_out_of_closed.append(parent)
+                closed.remove(parent)
                 parent=parent.root_parent
             else:
                 break_counter+=1
-            # print('no valid path')
-            # break
         else:
             # gives the element with the lowest f_cost
             parent.way,parent.path=False,True
@@ -228,5 +230,6 @@ def calculate():
         if parent.target:
             break
 
+    source.path=False
     # display grid
     show_grid(grid)
