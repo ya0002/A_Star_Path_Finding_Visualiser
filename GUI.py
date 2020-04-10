@@ -56,7 +56,7 @@ class Interface(BoxLayout):
                 if j.path:
                     print('path maker ',j.row, j.col)
                     with self.wid.canvas:
-                        Color(1, 0, 1,.5,mode='rgba')
+                        Color(1, 1, 0,.4,mode='rgba')
                         Rectangle(pos=(j.col*50,self.corrected_row[j.row]*50),size=(45,45))
 
 

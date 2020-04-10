@@ -110,23 +110,13 @@ def add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,targe
         set_cost(grid, to_enter_row, to_enter_col, target_r, target_c, parent,distance)
         open.add(grid[to_enter_row][to_enter_col],closed,thrown_out_of_closed)
 
-# ----------------------------------------------------main------------------------------------------------------------------
-
-
-# a grid of 10x10(9x9)
-# (RESOLVED) 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
-grid = [[Node(i, j) for j in range(10)] for i in range(10)]
-
-# enter the coordinates of source and target
-source_r, source_c = None,None
-target_r, target_c = None,None
-obstacle_list=set()
 
 def test_print():
     print('source-r',source_r,'source_c',source_c)
     print('target-r',target_r,'target_c',target_c)
     print(obstacle_list)
     print(len(obstacle_list))
+
 
 def calculate():
     # Pinning source and target
@@ -233,3 +223,16 @@ def calculate():
     source.path=False
     # display grid
     show_grid(grid)
+
+# ----------------------------------------------------main------------------------------------------------------------------
+
+
+# a grid of 10x10(9x9)
+# (RESOLVED) 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
+grid = [[Node(i, j) for j in range(100)] for i in range(100)]
+
+# enter the coordinates of source and target
+source_r, source_c = None,None
+target_r, target_c = None,None
+obstacle_list=set()
+
