@@ -1,7 +1,6 @@
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Rectangle
 from kivy.config import Config
@@ -66,8 +65,7 @@ class Interface(BoxLayout):
                     print('path maker ', j.row, j.col)
                     with self.wid.canvas:
                         Color(1, 0, 0, .8, mode='rgba')
-                        Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),
-                                  size=(self.size_factor, self.size_factor))
+                        Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),size=(self.size_factor, self.size_factor))
 
     def reset_grid(self,instance):
         self.wid.canvas.clear()

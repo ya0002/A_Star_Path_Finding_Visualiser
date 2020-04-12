@@ -63,7 +63,7 @@ class PriorityQ:
             self.Q.clear()
 
 # function to display grid
-def show_grid(grid):
+def show_grid():
     for i in grid:
         for j in i:
             if j.way:
@@ -80,23 +80,23 @@ def show_grid(grid):
 
 
 # function to set source node
-def set_source(grid, row, column):
+def set_source(row, column):
     grid[row][column].source, grid[row][column].way = True, False
 
 
 # function to set target node
-def set_target(grid, row, column):
+def set_target(row, column):
     grid[row][column].target, grid[row][column].way = True, False
 
 #function to set obstacle
-def set_obstacle(grid,obstacle_list):
+def set_obstacle():
     for coordinate in obstacle_list:
         cell=grid[coordinate[0]][coordinate[1]]
         cell.obstacle, cell.way = True, False
 
 
 # calculate h_cost for all nodes
-def set_cost(grid, currentrow, currentcol, target_r, target_c, parent, distance=1):
+def set_cost(currentrow, currentcol, target_r, target_c, parent, distance=1):
     dx = abs(target_r - currentrow)
     dy = abs(target_c - currentcol)
     # got this formula from Stanford's website on A* path finding
@@ -105,9 +105,9 @@ def set_cost(grid, currentrow, currentcol, target_r, target_c, parent, distance=
     grid[currentrow][currentcol].calculate_fcost()
 
 # function to add to open list/Q
-def add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,distance=1 ):
+def add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,distance=1 ):
     if to_enter_row>=0 and to_enter_col>=0:
-        set_cost(grid, to_enter_row, to_enter_col, target_r, target_c, parent,distance)
+        set_cost(to_enter_row, to_enter_col, target_r, target_c, parent,distance)
         open.add(grid[to_enter_row][to_enter_col],closed,thrown_out_of_closed)
 
 
@@ -120,9 +120,9 @@ def test_print():
 
 def calculate():
     # Pinning source and target
-    set_source(grid, source_r, source_c)
-    set_target(grid, target_r, target_c)
-    set_obstacle(grid,obstacle_list)
+    set_source(source_r, source_c)
+    set_target(target_r, target_c)
+    set_obstacle()
 
     source = grid[source_r][source_c]
     source.g_cost = 0
@@ -140,56 +140,56 @@ def calculate():
         # top left
         try:
             to_enter_row, to_enter_col = parent.row - 1, parent.col - 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
+            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
         except IndexError:
             pass
 
         # top
         try:
             to_enter_row, to_enter_col = parent.row - 1, parent.col
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
+            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
         except IndexError:
             pass
 
         # top right
         try:
             to_enter_row, to_enter_col = parent.row - 1, parent.col + 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
+            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
         except IndexError:
             pass
         # ------------------------bottom-----------------------------------------
         # bottom left
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col - 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
+            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
         except IndexError:
             pass
 
         # bottom
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
+            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
         except IndexError:
             pass
 
         # bottom right
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col + 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
+            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
         except IndexError:
             pass
         # ----------------------------------sides---------------------
         # left
         try:
             to_enter_row, to_enter_col = parent.row, parent.col - 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
+            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
         except IndexError:
             pass
 
         # right
         try:
             to_enter_row, to_enter_col = parent.row, parent.col + 1
-            add_to_open(grid,to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
+            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
         except IndexError:
             pass
 
@@ -222,7 +222,7 @@ def calculate():
 
     source.path=False
     # display grid
-    show_grid(grid)
+    show_grid()
 
 def reset():
     for i in grid:
@@ -241,7 +241,7 @@ def reset():
 # ----------------------------------------------------main------------------------------------------------------------------
 
 
-# a grid of 100x1=0(99x99)
+# a grid of 100x100(99x99)
 # (RESOLVED) 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
 grid = [[Node(i, j) for j in range(100)] for i in range(100)]
 
