@@ -31,6 +31,10 @@ class Interface(BoxLayout):
         self.start.bind(on_press=self.show_path)
         self.second.add_widget(self.start)
 
+        self.reset = Button(text='reset', size_hint=(.3, .17), pos_hint={'top': 1})
+        self.reset.bind(on_press=self.reset_grid)
+        self.second.add_widget(self.reset)
+
         self.create_grid()
 
         self.count = 0
@@ -64,6 +68,12 @@ class Interface(BoxLayout):
                         Color(1, 0, 0, .8, mode='rgba')
                         Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),
                                   size=(self.size_factor, self.size_factor))
+
+    def reset_grid(self,instance):
+        self.wid.canvas.clear()
+        self.create_grid()
+        self.count=0
+        A_Star.reset()
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)

@@ -224,10 +224,24 @@ def calculate():
     # display grid
     show_grid(grid)
 
+def reset():
+    for i in grid:
+        for j in i:
+            if j.obstacle:
+                j.obstacle,j.way=False,True
+            elif j.source:
+                j.source,j.way=False,True
+            elif j.target:
+                j.target,j.way=False,True
+            elif j.path:
+                j.path,j.way=False,True
+    obstacle_list.clear()
+
+
 # ----------------------------------------------------main------------------------------------------------------------------
 
 
-# a grid of 10x10(9x9)
+# a grid of 100x1=0(99x99)
 # (RESOLVED) 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
 grid = [[Node(i, j) for j in range(100)] for i in range(100)]
 
