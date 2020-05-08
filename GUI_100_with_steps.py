@@ -5,6 +5,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Rectangle
 from kivy.config import Config
 from kivy.graphics import Color
+from kivy.clock import Clock
+from functools import partial
 import A_Star
 
 # setting the size of the window
@@ -55,18 +57,25 @@ class Interface(BoxLayout):
                 for i in range(self.grid_size):
                     Rectangle(pos=(i * self.pos_factor, j * self.pos_factor), size=(self.size_factor, self.size_factor))
 
+    def color_it(self,j,dt):
+        print('IDHAR!')
+        with self.wid.canvas:
+            Color(1, 0, 0, .8, mode='rgba')
+            Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),size=(self.size_factor, self.size_factor))
+
+
     def show_path(self, instance):
         print("button used")
         A_Star.calculate()
         grid = A_Star.grid
+        timer=2
         for i in grid:
             for j in i:
                 if j.path:
                     print('path maker ', j.row, j.col)
-                    with self.wid.canvas:
-                        Color(1, 0, 0, .8, mode='rgba')
-                        Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),size=(self.size_factor, self.size_factor))
-                        
+                    Clock.schedule_once(partial(self.color_it,j),timer)
+                    timer+=1
+
     def reset_grid(self,instance):
         self.wid.canvas.clear()
         self.create_grid()

@@ -1,3 +1,4 @@
+#text based
 import math
 
 # to store each node of the graph
