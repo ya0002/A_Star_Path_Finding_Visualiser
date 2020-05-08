@@ -68,7 +68,7 @@ class Interface(BoxLayout):
         print("button used")
         A_Star.calculate()
         grid = A_Star.grid
-        timer=2
+        timer=0.1
         for i in grid:
             for j in i:
                 if j.path:
