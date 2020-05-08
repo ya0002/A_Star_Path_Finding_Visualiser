@@ -74,7 +74,7 @@ class Interface(BoxLayout):
                 if j.path:
                     print('path maker ', j.row, j.col)
                     Clock.schedule_once(partial(self.color_it,j),timer)
-                    timer+=1
+                    timer+=0.1
 
     def reset_grid(self,instance):
         self.wid.canvas.clear()
