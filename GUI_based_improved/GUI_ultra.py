@@ -27,22 +27,22 @@ class Node:
     def calculate_fcost(self):
         self.f_cost = self.g_cost + self.h_cost
 
-#Data structure to store nodes according to their F-cost or H-cost as needed
+
+# Data structure to store nodes according to their F-cost or H-cost as needed
 class PriorityQ:
     def __init__(self):
         self.Q = []
-        self.Q_copy=[]
+        self.Q_copy = []
 
     #  Q= [(node.f_cost,node),(),(), .....]
-    def add(self, node, closed,thrown_out_of_closed):
-        if node not in closed and node not in thrown_out_of_closed and node.obstacle==False:
+    def add(self, node, closed, thrown_out_of_closed):
+        if node not in closed and node not in thrown_out_of_closed and node.obstacle == False:
             if len(self.Q) == 0:
                 self.Q.append((node.f_cost, node))
             else:
                 self.Qsort(node)
                 if not node.target:
                     interface.trigger_useless(node)
-
 
     def Qsort(self, node):
         for i in range(len(self.Q)):
@@ -64,16 +64,17 @@ class PriorityQ:
 
     # Pop the first element, i.e. the one with the lowest F-cost
     def popQ(self):
-        if len(self.Q)!=0:
-            lowest=self.Q.pop(0)
+        if len(self.Q) != 0:
+            lowest = self.Q.pop(0)
             return lowest
 
     # append all the remaining elements of Q to Q_copy and then clear the Q.
     def copyQ(self):
-        if len(self.Q)!=0:
+        if len(self.Q) != 0:
             for i in self.Q:
                 self.Q_copy.append(i)
             self.Q.clear()
+
 
 # function to display grid
 def show_grid():
@@ -101,10 +102,11 @@ def set_source(row, column):
 def set_target(row, column):
     grid[row][column].target, grid[row][column].way = True, False
 
-#function to set obstacle
+
+# function to set obstacle
 def set_obstacle():
     for coordinate in obstacle_list:
-        cell=grid[coordinate[0]][coordinate[1]]
+        cell = grid[coordinate[0]][coordinate[1]]
         cell.obstacle, cell.way = True, False
 
 
@@ -114,19 +116,20 @@ def set_cost(currentrow, currentcol, target_r, target_c, parent, distance=1):
     dy = abs(target_c - currentcol)
     # got this formula from Stanford's website on A* path finding
     grid[currentrow][currentcol].h_cost = (dx + dy) + ((1.4 - 2) * min(dx, dy))
-    grid[currentrow][currentcol].g_cost =parent.g_cost + distance
+    grid[currentrow][currentcol].g_cost = parent.g_cost + distance
     grid[currentrow][currentcol].calculate_fcost()
 
+
 # function to add to open list/Q
-def add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,distance=1 ):
-    if to_enter_row>=0 and to_enter_col>=0:
-        set_cost(to_enter_row, to_enter_col, target_r, target_c, parent,distance)
-        open.add(grid[to_enter_row][to_enter_col],closed,thrown_out_of_closed)
+def add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed, distance=1):
+    if to_enter_row >= 0 and to_enter_col >= 0:
+        set_cost(to_enter_row, to_enter_col, target_r, target_c, parent, distance)
+        open.add(grid[to_enter_row][to_enter_col], closed, thrown_out_of_closed)
 
 
 def test_print():
-    print('source-r',source_r,'source_c',source_c)
-    print('target-r',target_r,'target_c',target_c)
+    print('source-r', source_r, 'source_c', source_c)
+    print('target-r', target_r, 'target_c', target_c)
     print(obstacle_list)
     print(len(obstacle_list))
 
@@ -142,90 +145,90 @@ def calculate():
 
     open = PriorityQ()
     closed = []
-    thrown_out_of_closed=[]
+    thrown_out_of_closed = []
     closed.append(source)
     parent = source
-    dd=math.sqrt(2)  # diagonal distance , approx=1.4(root 2)
-    break_counter=0
+    dd = math.sqrt(2)  # diagonal distance , approx=1.4(root 2)
+    break_counter = 0
 
     while True:
 
         # top left
         try:
             to_enter_row, to_enter_col = parent.row - 1, parent.col - 1
-            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
+            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed, dd)
         except IndexError:
             pass
 
         # top
         try:
             to_enter_row, to_enter_col = parent.row - 1, parent.col
-            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
+            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed)
         except IndexError:
             pass
 
         # top right
         try:
             to_enter_row, to_enter_col = parent.row - 1, parent.col + 1
-            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
+            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed, dd)
         except IndexError:
             pass
         # ------------------------bottom-----------------------------------------
         # bottom left
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col - 1
-            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
+            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed, dd)
         except IndexError:
             pass
 
         # bottom
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col
-            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
+            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed)
         except IndexError:
             pass
 
         # bottom right
         try:
             to_enter_row, to_enter_col = parent.row + 1, parent.col + 1
-            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed,dd )
+            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed, dd)
         except IndexError:
             pass
         # ----------------------------------sides---------------------
         # left
         try:
             to_enter_row, to_enter_col = parent.row, parent.col - 1
-            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
+            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed)
         except IndexError:
             pass
 
         # right
         try:
             to_enter_row, to_enter_col = parent.row, parent.col + 1
-            add_to_open(to_enter_row,to_enter_col,parent,open,closed,target_c,target_r,thrown_out_of_closed)
+            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed)
         except IndexError:
             pass
 
         # if len(Q)==0 then no path exists
-        if len(open.Q)==0:
-            if parent!=source:
-                parent.way,parent.path=True,False
+        if len(open.Q) == 0:
+            if parent != source:
+                parent.way, parent.path = True, False
                 thrown_out_of_closed.append(parent)
                 closed.remove(parent)
-                parent=parent.root_parent
+                parent = parent.root_parent
             else:
-                break_counter+=1
+                break_counter += 1
         else:
             # gives the element with the lowest f_cost
-            parent.way,parent.path=False,True
+            parent.way, parent.path = False, True
             if not parent.source:
                 interface.trigger(parent)
-            to_be_parent=open.popQ()[1]
-            to_be_parent.root_parent=parent
-            parent=to_be_parent
+            to_be_parent = open.popQ()[1]
+            to_be_parent.root_parent = parent
+            parent = to_be_parent
             closed.append(parent)
 
-        if break_counter==2:
+        if break_counter == 2:
             print('no valid path')
             break
 
@@ -235,33 +238,34 @@ def calculate():
         if parent.target:
             break
 
-    source.path=False
+    source.path = False
     # display grid
     show_grid()
+
 
 def reset():
     for i in grid:
         for j in i:
             if j.obstacle:
-                j.obstacle,j.way=False,True
+                j.obstacle, j.way = False, True
             elif j.source:
-                j.source,j.way=False,True
+                j.source, j.way = False, True
             elif j.target:
-                j.target,j.way=False,True
+                j.target, j.way = False, True
             elif j.path:
-                j.path,j.way=False,True
+                j.path, j.way = False, True
     obstacle_list.clear()
 
 
 # ----------------------------------------------------main------------------------------------------------------------------
 
 
-# a grid of 100x100(99x99)
+# a grid of 50x50(49x49)
 # (RESOLVED) 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
-grid = [[Node(i, j) for j in range(100)] for i in range(100)]
-obstacle_list=set()
+grid = [[Node(i, j) for j in range(50)] for i in range(50)]
+obstacle_list = set()
 
-#-------------------------------------------- GUI --------------------------------------------------
+# -------------------------------------------- GUI --------------------------------------------------
 
 # setting the size of the window
 Config.set('graphics', 'resizable', False)
@@ -270,10 +274,10 @@ Config.set('graphics', 'height', 550)
 
 
 class Interface(BoxLayout):
-
     size_factor = 8
     pos_factor = 10
-    grid_size=50
+    grid_size = 50
+
     def __init__(self, **kwargs):
         super(Interface, self).__init__(**kwargs)
 
@@ -295,14 +299,14 @@ class Interface(BoxLayout):
         self.count = 0
         self.corrected_row = {}
         for i in range(self.grid_size):
-            self.corrected_row[i]=(self.grid_size-1)-i
+            self.corrected_row[i] = (self.grid_size - 1) - i
 
         self.source_r_GUI = None
         self.source_c_GUI = None
         self.target_r_GUI = None
         self.target_c_GUI = None
 
-        self.timer=0
+        self.timer = 0
 
         self.add_widget(self.second)
         self.add_widget(self.wid)
@@ -313,27 +317,28 @@ class Interface(BoxLayout):
                 for i in range(self.grid_size):
                     Rectangle(pos=(i * self.pos_factor, j * self.pos_factor), size=(self.size_factor, self.size_factor))
 
-    def color_it(self,j,r,g,b,a,dt):
+    def color_it(self, j, r, g, b, a, dt):
         print('IDHAR!')
         with self.wid.canvas:
             Color(r, g, b, a, mode='rgba')
-            Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),size=(self.size_factor, self.size_factor))
+            Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),
+                      size=(self.size_factor, self.size_factor))
 
-    def trigger(self,j):
-        self.timer+=0.1
-        Clock.schedule_once(partial(self.color_it,j,1,0,0,1),self.timer)
+    def trigger(self, j):
+        self.timer += 0.1
+        Clock.schedule_once(partial(self.color_it, j, 1, 0, 0, 1), self.timer)
 
-    def trigger_useless(self,j):
-        Clock.schedule_once(partial(self.color_it,j,.3,.6,1,.4),self.timer)
+    def trigger_useless(self, j):
+        Clock.schedule_once(partial(self.color_it, j, .3, .6, 1, .4), self.timer)
 
     def show_path(self, instance):
         print("button used")
         calculate()
 
-    def reset_grid(self,instance):
+    def reset_grid(self, instance):
         self.wid.canvas.clear()
         self.create_grid()
-        self.count,self.timer=0,0
+        self.count, self.timer = 0, 0
         reset()
 
     def on_touch_down(self, touch):
@@ -341,7 +346,8 @@ class Interface(BoxLayout):
 
         try:
             # in kivy grid co-ordinates follow the format (col,row)
-            print(self.corrected_row[touch.pos[1] // self.pos_factor], int(touch.pos[0] // self.pos_factor))  # it's basically corrected_row[COL//self.pos_factor] , int(ROW) => ROW , COL [normal]
+            print(self.corrected_row[touch.pos[1] // self.pos_factor], int(touch.pos[
+                                                                               0] // self.pos_factor))  # it's basically corrected_row[COL//self.pos_factor] , int(ROW) => ROW , COL [normal]
             g_row = touch.pos[0] // self.pos_factor
             g_col = touch.pos[1] // self.pos_factor
 
@@ -371,7 +377,7 @@ class Interface(BoxLayout):
             Rectangle(pos=(g_row * self.pos_factor, g_col * self.pos_factor), size=(self.size_factor, self.size_factor))
             self.source_r_GUI = g_row
             self.source_c_GUI = g_col
-            global source_r,source_c
+            global source_r, source_c
             source_r = self.corrected_row[g_col]
             source_c = int(g_row)
 
@@ -381,7 +387,7 @@ class Interface(BoxLayout):
             Rectangle(pos=(g_row * self.pos_factor, g_col * self.pos_factor), size=(self.size_factor, self.size_factor))
             self.target_r_GUI = g_row
             self.target_c_GUI = g_col
-            global target_c,target_r
+            global target_c, target_r
             target_r = self.corrected_row[g_col]
             target_c = int(g_row)
 
@@ -395,7 +401,9 @@ class Interface(BoxLayout):
                 obstacle_list.add((self.corrected_row[g_col], int(g_row)))
                 test_print()
 
-interface=Interface()
+
+interface = Interface()
+
 
 class A_starApp(App):
     def build(self):
