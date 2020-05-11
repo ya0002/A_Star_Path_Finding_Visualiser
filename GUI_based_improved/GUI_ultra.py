@@ -333,7 +333,7 @@ class Interface(BoxLayout):
     def reset_grid(self,instance):
         self.wid.canvas.clear()
         self.create_grid()
-        self.count=0
+        self.count,self.timer=0,0
         reset()
 
     def on_touch_down(self, touch):
