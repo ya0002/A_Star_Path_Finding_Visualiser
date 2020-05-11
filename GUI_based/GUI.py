@@ -1,12 +1,11 @@
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Rectangle
 from kivy.config import Config
 from kivy.graphics import Color
-import A_Star
+from GUI_based import A_Star
 
 # setting the size of the window
 Config.set('graphics','resizable',False)
@@ -50,7 +49,7 @@ class Interface(BoxLayout):
     def show_path(self, instance):
         print("button used")
         A_Star.calculate()
-        grid=A_Star.grid
+        grid= A_Star.grid
         for i in grid:
             for j in i:
                 if j.path:
@@ -112,7 +111,7 @@ class Interface(BoxLayout):
             if (g_row!=self.source_r_GUI or g_col!=self.source_c_GUI) and (g_row!=self.target_r_GUI or g_col!=self.target_c_GUI):
                 Color(0, .5, .5,mode='rgb')
                 Rectangle(pos=(g_row*50,g_col*50),size=(45,45))
-                A_Star.obstacle_list.add((self.corrected_row[g_col],int(g_row)))
+                A_Star.obstacle_list.add((self.corrected_row[g_col], int(g_row)))
                 A_Star.test_print()
 
 class MyApp(App):

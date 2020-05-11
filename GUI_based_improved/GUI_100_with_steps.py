@@ -5,7 +5,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Rectangle
 from kivy.config import Config
 from kivy.graphics import Color
-import A_Star
+from kivy.clock import Clock
+from functools import partial
+from GUI_based_improved import A_Star
 
 # setting the size of the window
 Config.set('graphics', 'resizable', False)
@@ -55,9 +57,13 @@ class Interface(BoxLayout):
                 for i in range(self.grid_size):
                     Rectangle(pos=(i * self.pos_factor, j * self.pos_factor), size=(self.size_factor, self.size_factor))
 
-    def show_path(self, instance):
-        print("button used")
-        A_Star.calculate()
+    def color_it(self,j):
+        print('IDHAR!')
+        with self.wid.canvas:
+            Color(1, 0, 0, .8, mode='rgba')
+            Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),size=(self.size_factor, self.size_factor))
+
+    def trigger(self):
         grid = A_Star.grid
         for i in grid:
             for j in i:
@@ -66,7 +72,11 @@ class Interface(BoxLayout):
                     with self.wid.canvas:
                         Color(1, 0, 0, .8, mode='rgba')
                         Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),size=(self.size_factor, self.size_factor))
-                        
+
+    def show_path(self, instance):
+        print("button used")
+        A_Star.calculate()
+
     def reset_grid(self,instance):
         self.wid.canvas.clear()
         self.create_grid()
@@ -130,11 +140,12 @@ class Interface(BoxLayout):
                 A_Star.obstacle_list.add((self.corrected_row[g_col], int(g_row)))
                 A_Star.test_print()
 
+interface=Interface()
 
-class MyApp(App):
+class A_starApp(App):
     def build(self):
-        return Interface()
+        return interface
 
 
 if __name__ == "__main__":
-    MyApp().run()
+    A_starApp().run()
