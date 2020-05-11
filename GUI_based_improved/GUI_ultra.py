@@ -40,6 +40,9 @@ class PriorityQ:
                 self.Q.append((node.f_cost, node))
             else:
                 self.Qsort(node)
+                if not node.target:
+                    interface.trigger_useless(node)
+
 
     def Qsort(self, node):
         for i in range(len(self.Q)):
@@ -310,15 +313,18 @@ class Interface(BoxLayout):
                 for i in range(self.grid_size):
                     Rectangle(pos=(i * self.pos_factor, j * self.pos_factor), size=(self.size_factor, self.size_factor))
 
-    def color_it(self,j,dt):
+    def color_it(self,j,r,g,b,a,dt):
         print('IDHAR!')
         with self.wid.canvas:
-            Color(1, 0, 0, .8, mode='rgba')
+            Color(r, g, b, a, mode='rgba')
             Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),size=(self.size_factor, self.size_factor))
 
     def trigger(self,j):
-        self.timer+=0.2
-        Clock.schedule_once(partial(self.color_it,j),self.timer)
+        self.timer+=0.1
+        Clock.schedule_once(partial(self.color_it,j,1,0,0,.8),self.timer)
+
+    def trigger_useless(self,j):
+        Clock.schedule_once(partial(self.color_it,j,0,0,1,.4),self.timer)
 
     def show_path(self, instance):
         print("button used")
