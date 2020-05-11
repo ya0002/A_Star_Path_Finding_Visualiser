@@ -266,7 +266,7 @@ obstacle_list=set()
 # setting the size of the window
 Config.set('graphics', 'resizable', False)
 Config.set('graphics', 'width', 500)
-Config.set('graphics', 'height', 600)
+Config.set('graphics', 'height', 550)
 
 
 class Interface(BoxLayout):
@@ -321,10 +321,10 @@ class Interface(BoxLayout):
 
     def trigger(self,j):
         self.timer+=0.1
-        Clock.schedule_once(partial(self.color_it,j,1,0,0,.8),self.timer)
+        Clock.schedule_once(partial(self.color_it,j,1,0,0,1),self.timer)
 
     def trigger_useless(self,j):
-        Clock.schedule_once(partial(self.color_it,j,0,0,1,.4),self.timer)
+        Clock.schedule_once(partial(self.color_it,j,.3,.6,1,.4),self.timer)
 
     def show_path(self, instance):
         print("button used")
