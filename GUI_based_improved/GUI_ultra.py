@@ -5,7 +5,6 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.graphics import Rectangle
 from kivy.config import Config
 from kivy.graphics import Color
-from time import sleep
 from kivy.clock import Clock
 from functools import partial
 import math
@@ -216,7 +215,8 @@ def calculate():
         else:
             # gives the element with the lowest f_cost
             parent.way,parent.path=False,True
-            interface.color_it(parent)
+            if not parent.source:
+                interface.trigger(parent)
             to_be_parent=open.popQ()[1]
             to_be_parent.root_parent=parent
             parent=to_be_parent
@@ -299,6 +299,8 @@ class Interface(BoxLayout):
         self.target_r_GUI = None
         self.target_c_GUI = None
 
+        self.timer=0
+
         self.add_widget(self.second)
         self.add_widget(self.wid)
 
@@ -308,20 +310,15 @@ class Interface(BoxLayout):
                 for i in range(self.grid_size):
                     Rectangle(pos=(i * self.pos_factor, j * self.pos_factor), size=(self.size_factor, self.size_factor))
 
-    def color_it(self,j):
+    def color_it(self,j,dt):
         print('IDHAR!')
         with self.wid.canvas:
             Color(1, 0, 0, .8, mode='rgba')
             Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),size=(self.size_factor, self.size_factor))
 
-    def trigger(self):
-        for i in grid:
-            for j in i:
-                if j.path:
-                    print('path maker ', j.row, j.col)
-                    with self.wid.canvas:
-                        Color(1, 0, 0, .8, mode='rgba')
-                        Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),size=(self.size_factor, self.size_factor))
+    def trigger(self,j):
+        self.timer+=0.2
+        Clock.schedule_once(partial(self.color_it,j),self.timer)
 
     def show_path(self, instance):
         print("button used")
