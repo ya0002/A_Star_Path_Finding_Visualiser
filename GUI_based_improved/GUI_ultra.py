@@ -255,15 +255,7 @@ def reset():
             elif j.path:
                 j.path, j.way = False, True
     obstacle_list.clear()
-
-
-# ----------------------------------------------------main------------------------------------------------------------------
-
-
-# a grid of 50x50(49x49)
-# (RESOLVED) 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
-grid = [[Node(i, j) for j in range(50)] for i in range(50)]
-obstacle_list = set()
+#-------------------------------------------------------------------------------------------------------------------------------------
 
 # -------------------------------------------- GUI --------------------------------------------------
 
@@ -314,6 +306,7 @@ class Interface(BoxLayout):
     def create_grid(self):
         with self.wid.canvas:
             for j in range(self.grid_size):
+                Color(.9, .9, .9, 1, mode='rgba')
                 for i in range(self.grid_size):
                     Rectangle(pos=(i * self.pos_factor, j * self.pos_factor), size=(self.size_factor, self.size_factor))
 
@@ -325,7 +318,7 @@ class Interface(BoxLayout):
                       size=(self.size_factor, self.size_factor))
 
     def trigger(self, j):
-        self.timer += 0.1
+        self.timer += 0.01
         Clock.schedule_once(partial(self.color_it, j, 1, 0, 0, 1), self.timer)
 
     def trigger_useless(self, j):
@@ -404,11 +397,17 @@ class Interface(BoxLayout):
 
 interface = Interface()
 
-
 class A_starApp(App):
     def build(self):
         return interface
 
+
+# ----------------------------------------------------main------------------------------------------------------------------
+
+# a grid of 50x50(49x49)
+# (RESOLVED) 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
+grid = [[Node(i, j) for j in range(50)] for i in range(50)]
+obstacle_list = set()
 
 if __name__ == "__main__":
     A_starApp().run()
