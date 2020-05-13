@@ -114,7 +114,7 @@ def set_obstacle():
 def set_cost(currentrow, currentcol, target_r, target_c, parent, distance=1):
     dx = abs(target_r - currentrow)
     dy = abs(target_c - currentcol)
-    # got this formula from Stanford's website on A* path finding
+    # got this formula from Stanford's website on A* path finding(diagonal distance)
     grid[currentrow][currentcol].h_cost = (dx + dy) + ((1.4 - 2) * min(dx, dy))
     grid[currentrow][currentcol].g_cost = parent.g_cost + distance
     grid[currentrow][currentcol].calculate_fcost()
