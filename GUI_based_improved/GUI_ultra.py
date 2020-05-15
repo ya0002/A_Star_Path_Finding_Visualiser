@@ -266,7 +266,7 @@ Config.set('graphics', 'height', 550)
 
 
 class Interface(BoxLayout):
-    size_factor = 8
+    size_factor = 9.5
     pos_factor = 10
     grid_size = 50
 
@@ -319,7 +319,7 @@ class Interface(BoxLayout):
 
     def trigger(self, j):
         self.timer += 0.01
-        Clock.schedule_once(partial(self.color_it, j, 1, 0, 0, 1), self.timer)
+        Clock.schedule_once(partial(self.color_it, j, .7, 0, 0, 1), self.timer)
 
     def trigger_useless(self, j):
         Clock.schedule_once(partial(self.color_it, j, .3, .6, 1, .4), self.timer)
@@ -388,7 +388,7 @@ class Interface(BoxLayout):
         with self.wid.canvas:
             if (g_row != self.source_r_GUI or g_col != self.source_c_GUI) and (
                     g_row != self.target_r_GUI or g_col != self.target_c_GUI):
-                Color(0, .5, .5, mode='rgb')
+                Color(.2, .2, .2, mode='rgb')
                 Rectangle(pos=(g_row * self.pos_factor, g_col * self.pos_factor),
                           size=(self.size_factor, self.size_factor))
                 obstacle_list.add((self.corrected_row[g_col], int(g_row)))
