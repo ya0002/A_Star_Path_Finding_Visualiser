@@ -1,3 +1,5 @@
+#just the path, no visualization
+
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget

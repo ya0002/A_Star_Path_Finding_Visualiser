@@ -1,3 +1,6 @@
+#the algorithm
+# the most efficient form of this is written in GUI_based_improved/GUI_presentable
+
 import math
 
 # to store each node of the graph
@@ -243,7 +246,7 @@ def reset():
 
 # a grid of 100x100(99x99)
 # (RESOLVED) 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
-grid = [[Node(i, j) for j in range(100)] for i in range(100)]
+grid = [[Node(i, j) for j in range(50)] for i in range(50)]
 
 # enter the coordinates of source and target
 source_r, source_c = None,None

@@ -1,3 +1,5 @@
+#the unstable version
+
 from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
@@ -133,7 +135,8 @@ def test_print():
     print(obstacle_list)
     print(len(obstacle_list))
 
-
+closed = []
+indexes = [0, 1, -1]
 def calculate():
     # Pinning source and target
     set_source(source_r, source_c)
@@ -144,26 +147,26 @@ def calculate():
     source.g_cost = 0
 
     open = PriorityQ()
-    closed = []
+
     thrown_out_of_closed = []
     closed.append(source)
     parent = source
     dd = math.sqrt(2)  # diagonal distance , approx=1.4(root 2)
-    indexes=[0,1,-1]
+
     break_counter = 0
 
     while True:
 
         for i in indexes:
             for j in indexes:
-                if (i,j)!=(0,0):
+                if (i, j) != (0, 0):
                     try:
                         to_enter_row, to_enter_col = parent.row + i, parent.col + j
-                        if i==0 or j==0:  #if either of them==0  that means its not going diagonal
-                            distance=1
+                        if i == 0 or j == 0:  # if either of them==0  that means its not going diagonal
+                            distance = 1
                         else:
-                            distance=dd
-                        add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed, distance)
+                            distance = dd
+                        add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r,thrown_out_of_closed, distance)
                     except IndexError:
                         pass
 
@@ -197,9 +200,37 @@ def calculate():
             break
 
     source.path = False
+
     # display grid
     show_grid()
 
+def show_final_path():
+    current=closed[-1]
+    already_mapped=[closed[-1]]
+    while True:
+        print(current.row," ",current.col)
+        possible_final=[]
+        for i in indexes:
+            for j in indexes:
+                if (i, j) != (0, 0):
+                    to_enter_row, to_enter_col = current.row + i, current.col + j
+                    if len(grid)>to_enter_row>=0 and len(grid)>to_enter_col>=0:
+                        if grid[to_enter_row][to_enter_col] in closed and grid[to_enter_row][to_enter_col] not in already_mapped:
+                            possible_final.append(grid[to_enter_row][to_enter_col])
+
+        if len(possible_final)==0:
+            current=grid[current.row-1][current.col]
+            continue
+
+        lowest_g=possible_final[0]
+        for i in range(1,len(possible_final)):
+            if possible_final[i].g_cost < lowest_g.g_cost:
+                lowest_g=possible_final[i]
+        current=lowest_g
+        already_mapped.append(lowest_g)
+        interface.trigger_path(lowest_g)
+        if lowest_g.source:
+            break
 
 def reset():
     for i in grid:
@@ -213,7 +244,9 @@ def reset():
             elif j.path:
                 j.path, j.way = False, True
     obstacle_list.clear()
-#-------------------------------------------------------------------------------------------------------------------------------------
+    closed.clear()
+
+# -------------------------------------------------------------------------------------------------------------------------------------
 
 # -------------------------------------------- GUI --------------------------------------------------
 
@@ -272,8 +305,7 @@ class Interface(BoxLayout):
         print('IDHAR!')
         with self.wid.canvas:
             Color(r, g, b, a, mode='rgba')
-            Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),
-                      size=(self.size_factor, self.size_factor))
+            Rectangle(pos=(j.col * self.pos_factor, self.corrected_row[j.row] * self.pos_factor),size=(self.size_factor, self.size_factor))
 
     def trigger(self, j):
         self.timer += 0.01
@@ -282,9 +314,13 @@ class Interface(BoxLayout):
     def trigger_useless(self, j):
         Clock.schedule_once(partial(self.color_it, j, .3, .6, 1, .4), self.timer)
 
+    def trigger_path(self, j):
+        Clock.schedule_once(partial(self.color_it, j, 1, 1, 0, 1), self.timer+0.2)
+
     def show_path(self, instance):
         print("button used")
         calculate()
+        show_final_path()
 
     def reset_grid(self, instance):
         self.wid.canvas.clear()
@@ -354,6 +390,7 @@ class Interface(BoxLayout):
 
 
 interface = Interface()
+
 
 class A_starApp(App):
     def build(self):

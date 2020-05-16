@@ -1,4 +1,4 @@
-#bad code
+#the most stable version
 
 from kivy.app import App
 from kivy.uix.button import Button
@@ -151,65 +151,23 @@ def calculate():
     closed.append(source)
     parent = source
     dd = math.sqrt(2)  # diagonal distance , approx=1.4(root 2)
+    indexes=[0,1,-1]
     break_counter = 0
 
     while True:
 
-        # top left
-        try:
-            to_enter_row, to_enter_col = parent.row - 1, parent.col - 1
-            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed, dd)
-        except IndexError:
-            pass
-
-        # top
-        try:
-            to_enter_row, to_enter_col = parent.row - 1, parent.col
-            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed)
-        except IndexError:
-            pass
-
-        # top right
-        try:
-            to_enter_row, to_enter_col = parent.row - 1, parent.col + 1
-            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed, dd)
-        except IndexError:
-            pass
-        # ------------------------bottom-----------------------------------------
-        # bottom left
-        try:
-            to_enter_row, to_enter_col = parent.row + 1, parent.col - 1
-            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed, dd)
-        except IndexError:
-            pass
-
-        # bottom
-        try:
-            to_enter_row, to_enter_col = parent.row + 1, parent.col
-            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed)
-        except IndexError:
-            pass
-
-        # bottom right
-        try:
-            to_enter_row, to_enter_col = parent.row + 1, parent.col + 1
-            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed, dd)
-        except IndexError:
-            pass
-        # ----------------------------------sides---------------------
-        # left
-        try:
-            to_enter_row, to_enter_col = parent.row, parent.col - 1
-            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed)
-        except IndexError:
-            pass
-
-        # right
-        try:
-            to_enter_row, to_enter_col = parent.row, parent.col + 1
-            add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed)
-        except IndexError:
-            pass
+        for i in indexes:
+            for j in indexes:
+                if (i,j)!=(0,0):
+                    try:
+                        to_enter_row, to_enter_col = parent.row + i, parent.col + j
+                        if i==0 or j==0:  #if either of them==0  that means its not going diagonal
+                            distance=1
+                        else:
+                            distance=dd
+                        add_to_open(to_enter_row, to_enter_col, parent, open, closed, target_c, target_r, thrown_out_of_closed, distance)
+                    except IndexError:
+                        pass
 
         # if len(Q)==0 then no path exists
         if len(open.Q) == 0:
