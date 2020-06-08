@@ -221,14 +221,18 @@ def reset():
 
 # setting the size of the window
 Config.set('graphics', 'resizable', False)
-Config.set('graphics', 'width', 500)
-Config.set('graphics', 'height', 550)
-
+# Config.set('graphics', 'width', 500)
+# Config.set('graphics', 'height', 550)
+Config.set('graphics', 'width', 630)
+Config.set('graphics', 'height', 690)
 
 class Interface(BoxLayout):
-    size_factor = 9.5
-    pos_factor = 10
-    grid_size = 50
+    size_factor = 17#9.5
+    pos_factor = 18#10
+
+    grid_size = 35
+    # grid_size = 76
+    # grid_size_height = 36
 
     def __init__(self, **kwargs):
         super(Interface, self).__init__(**kwargs)
@@ -364,9 +368,9 @@ class A_starApp(App):
 
 # ----------------------------------------------------main------------------------------------------------------------------
 
-# a grid of 50x50(49x49)
+# a grid of 35x35(34x34)
 # (RESOLVED) 0th column shouldn't be used, if the input recieved from GUI contains col=0 add +1 to both cols.  PLOT EVRYTHING WITH col+1
-grid = [[Node(i, j) for j in range(50)] for i in range(50)]
+grid = [[Node(i, j) for j in range(35)] for i in range(35)]
 obstacle_list = set()
 
 if __name__ == "__main__":
